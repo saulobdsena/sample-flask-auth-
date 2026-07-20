@@ -1,146 +1,412 @@
-# Sample Flask Auth 🔐
+# Sample Flask Auth
 
-Uma aplicação modelo (boilerplate) em Python utilizando o framework **Flask** para demonstrar fluxos de autenticação e autorização robustos, seguros e fáceis de estender. Este projeto serve como um ponto de partida ideal para desenvolvedores que desejam implementar sistemas de login, registro e rotas protegidas em suas aplicações web.
+A simple REST API built with Flask to demonstrate user authentication and basic user management operations.
 
----
+The project uses session-based authentication with Flask-Login, data persistence with Flask-SQLAlchemy, and a MySQL database.
 
-## 🚀 Funcionalidades
+## Features
 
-- **Registro de Usuários:** Cadastro seguro com validação de campos.
-- **Autenticação Segura:** Login e logout gerenciados de forma robusta utilizando sessões seguras.
-- **Criptografia de Senhas:** Hashing de senhas utilizando algoritmos modernos e seguros (ex: `bcrypt` ou `scrypt` via Werkzeug).
-- **Controle de Acesso:** Proteção de rotas utilizando decoradores para restringir o acesso apenas a usuários autenticados.
-- **Banco de Dados Relacional:** Integração com banco de dados usando **Flask-SQLAlchemy** (SQLite pré-configurado para desenvolvimento).
-- **Proteção CSRF:** Segurança contra ataques Cross-Site Request Forgery em formulários.
-- **Layout Responsivo:** Páginas de login, cadastro e dashboard construídas com design limpo e intuitivo.
+* User registration
+* Login with username and password
+* Logout
+* Retrieve a user by ID
+* Update a user password
+* Delete a user
+* Protected routes
+* Prevention of self-deletion
+* Password hashing with bcrypt
 
----
+## Technologies
 
-## 🛠️ Tecnologias Utilizadas
+* Python
+* Flask
+* Flask-SQLAlchemy
+* Flask-Login
+* MySQL
+* PyMySQL
+* bcrypt
 
-O projeto foi construído utilizando as melhores ferramentas e bibliotecas do ecossistema Python:
-
-- **[Flask](https://flask.palletsprojects.com/):** Micro-framework web rápido e flexível.
-- **[Flask-Login](https://flask-login.readthedocs.io/):** Gerenciamento de sessões de usuários.
-- **[Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/):** ORM para abstração e comunicação com o banco de dados.
-- **[Werkzeug](https://werkzeug.palletsprojects.com/):** Utilitários de segurança para hashing de senhas.
-- **[SQLite](https://www.sqlite.org/):** Banco de dados relacional leve para desenvolvimento ágil.
-
----
-
-## 📁 Estrutura do Projeto
-
-Abaixo está a organização de pastas recomendada e utilizada neste projeto:
+## Project Structure
 
 ```text
-sample-flask-auth/
-├── app/
-│   ├── __init__.py          # Inicialização do app, configurações e extensões
-│   ├── models.py            # Definição dos modelos de banco de dados (User)
-│   ├── routes.py            # Rotas e controladores da aplicação (Auth, Dashboard)
-│   ├── templates/           # Arquivos HTML da interface do usuário
-│   │   ├── base.html        # Template base (layout comum)
-│   │   ├── index.html       # Página inicial pública
-│   │   ├── login.html       # Tela de login
-│   │   ├── register.html    # Tela de cadastro de usuários
-│   │   └── dashboard.html   # Área protegida exclusiva para logados
-│   └── static/              # Arquivos estáticos (CSS, JS, Imagens)
-│       └── css/
-│           └── style.css    # Estilização customizada
-├── .env.example             # Exemplo de variáveis de ambiente
-├── requirements.txt         # Dependências do projeto
-└── run.py                   # Script principal para iniciar o servidor
+sample-flask-auth-/
+├── models/
+│   └── user.py
+├── app.py
+├── database.py
+├── requirements.txt
+└── README.md
 ```
 
----
+## User Model
 
-## ⚙️ Pré-requisitos e Instalação
+The application uses the following user model:
 
-Siga os passos abaixo para clonar, configurar e rodar o projeto localmente em sua máquina.
+| Field      | Type    | Description                                 |
+| ---------- | ------- | ------------------------------------------- |
+| `id`       | Integer | Unique user identifier                      |
+| `username` | String  | Unique username                             |
+| `password` | String  | User password                               |
+| `email`    | String  | Unique email address                        |
+| `role`     | String  | User role, with `user` as the default value |
 
-### 1. Clonar o Repositório
+## Requirements
+
+Before running the project, make sure you have installed:
+
+* Python 3
+* pip
+* MySQL or MariaDB
+* Git
+
+## Installation
+
+Clone the repository:
+
 ```bash
 git clone https://github.com/saulobdsena/sample-flask-auth-.git
+```
+
+Enter the project directory:
+
+```bash
 cd sample-flask-auth-
 ```
 
-### 2. Configurar o Ambiente Virtual (Virtualenv)
-Recomenda-se o uso de um ambiente virtual para isolar as dependências:
+Create a virtual environment:
 
-No **Linux/macOS**:
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+python -m venv .venv
 ```
 
-No **Windows** (Command Prompt):
+Activate the virtual environment.
+
+### Linux or macOS
+
+```bash
+source .venv/bin/activate
+```
+
+### Windows PowerShell
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+### Windows Command Prompt
+
 ```cmd
-python -m venv venv
-venv\Scripts\activate
+.venv\Scripts\activate
 ```
 
-### 3. Instalar as Dependências
-Com o ambiente virtual ativo, instale os pacotes necessários listados no arquivo `requirements.txt`:
+Install the dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Variáveis de Ambiente
-Renomeie ou copie o arquivo `.env.example` para `.env` e configure suas variáveis:
+Install bcrypt:
+
 ```bash
-cp .env.example .env
-```
-Abra o arquivo `.env` e defina uma chave secreta segura para a aplicação:
-```env
-FLASK_APP=run.py
-FLASK_ENV=development
-SECRET_KEY=sua-chave-secreta-altamente-segura
-DATABASE_URL=sqlite:///app.db
+pip install bcrypt
 ```
 
-### 5. Inicializar o Banco de Dados
-A aplicação criará automaticamente o arquivo do banco de dados SQLite ao ser executada pela primeira vez. Caso queira criar as tabelas manualmente via terminal interativo do Python:
+> The `bcrypt` package is used to generate and verify password hashes.
+
+## Database Configuration
+
+Create a MySQL database:
+
+```sql
+CREATE DATABASE `flask-crud`;
+```
+
+The current database connection is configured in `app.py`:
+
+```python
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    "mysql+pymysql://admin:admin123@127.0.0.1:3306/flask-crud"
+)
+```
+
+The connection URL follows this format:
+
+```text
+mysql+pymysql://USERNAME:PASSWORD@HOST:PORT/DATABASE
+```
+
+Update the username, password, host, port, and database name according to your MySQL installation.
+
+For better security, environment variables should be used:
+
+```python
+import os
+
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+    "DATABASE_URL",
+    "mysql+pymysql://admin:admin123@127.0.0.1:3306/flask-crud"
+)
+
+app.config["SECRET_KEY"] = os.getenv(
+    "SECRET_KEY",
+    "development-secret-key"
+)
+```
+
+## Creating the Database Tables
+
+After configuring the database, open a terminal in the project directory and run:
+
 ```bash
-python -c "from app import db, create_app; db.create_all(app=create_app())"
+python
 ```
 
----
+Then execute:
 
-## 🏃 Como Executar a Aplicação
+```python
+from app import app
+from database import db
 
-Inicie o servidor de desenvolvimento do Flask utilizando o comando:
+with app.app_context():
+    db.create_all()
+
+exit()
+```
+
+This command creates the table associated with the `User` model.
+
+## Running the Application
+
+Run:
+
 ```bash
-flask run
+python app.py
 ```
-Ou alternativamente executando o arquivo principal:
+
+By default, the API will be available at:
+
+```text
+http://127.0.0.1:5000
+```
+
+To verify that the application is running:
+
+```http
+GET /
+```
+
+Response:
+
+```text
+Hello
+```
+
+## API Endpoints
+
+### Register a User
+
+```http
+POST /user
+```
+
+Request body:
+
+```json
+{
+  "username": "saulo",
+  "password": "my-password",
+  "email": "saulo@example.com"
+}
+```
+
+Expected response:
+
+```json
+{
+  "message": "Successful"
+}
+```
+
+cURL example:
+
 ```bash
-python run.py
+curl -X POST http://127.0.0.1:5000/user \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "saulo",
+    "password": "my-password",
+    "email": "saulo@example.com"
+  }'
 ```
 
-A aplicação estará disponível no endereço: **[http://127.0.0.1:5000](http://127.0.0.1:5000)** 🚀
+### Login
 
----
+```http
+POST /login
+```
 
-## 🔒 Endpoints e Rotas Disponíveis
+Request body:
 
-| Método | Rota | Descrição | Acesso |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/` | Página de boas-vindas da aplicação | Público |
-| `GET` / `POST` | `/register` | Tela de cadastro de novos usuários | Público |
-| `GET` / `POST` | `/login` | Autenticação e login de usuários | Público |
-| `GET` | `/logout` | Encerramento da sessão atual do usuário | Autenticado |
-| `GET` | `/dashboard` | Área administrativa protegida | Autenticado |
+```json
+{
+  "username": "saulo",
+  "password": "my-password"
+}
+```
 
----
+Expected response:
 
-## 🛡️ Melhores Práticas Implementadas
+```json
+{
+  "message": "Authentication successful"
+}
+```
 
-- **Proteção de Senhas:** Nenhuma senha é guardada em texto plano. O projeto utiliza hashes criptográficos unidirecionais de última geração.
-- **Gestão de Sessão Segura:** Proteção contra ataques de fixação de sessão. Os identificadores de sessão são armazenados em cookies criptografados.
-- **Princípio do Menor Privilégio:** Rotas sensíveis possuem o decorator `@login_required` para garantir que apenas usuários verificados tenham acesso aos dados.
+cURL example:
 
----
+```bash
+curl -X POST http://127.0.0.1:5000/login \
+  -H "Content-Type: application/json" \
+  -c cookies.txt \
+  -d '{
+    "username": "saulo",
+    "password": "my-password"
+  }'
+```
 
-## 📄 Licença
+The `-c cookies.txt` option stores the session cookie required to access protected routes.
 
-Este projeto é de código aberto e está licenciado sob os termos da licença **[MIT](LICENSE)**. Sinta-se livre para usá-lo, modificá-lo e distribuí-lo como preferir.
+### Get a User
+
+```http
+GET /user/<id>
+```
+
+This route requires authentication.
+
+Example:
+
+```bash
+curl http://127.0.0.1:5000/user/1 \
+  -b cookies.txt
+```
+
+Response:
+
+```json
+{
+  "username": "saulo"
+}
+```
+
+If the user does not exist:
+
+```json
+{
+  "message": "User not found"
+}
+```
+
+### Update a User
+
+```http
+PUT /user/<id>
+```
+
+This route requires authentication.
+
+Request body:
+
+```json
+{
+  "password": "new-password"
+}
+```
+
+Example:
+
+```bash
+curl -X PUT http://127.0.0.1:5000/user/1 \
+  -H "Content-Type: application/json" \
+  -b cookies.txt \
+  -d '{
+    "password": "new-password"
+  }'
+```
+
+Expected response:
+
+```json
+{
+  "message": "User 1 updated!"
+}
+```
+
+### Delete a User
+
+```http
+DELETE /user/<id>
+```
+
+This route requires authentication.
+
+Example:
+
+```bash
+curl -X DELETE http://127.0.0.1:5000/user/2 \
+  -b cookies.txt
+```
+
+Expected response:
+
+```json
+{
+  "message": "User 2 deleted!"
+}
+```
+
+An authenticated user cannot delete their own account through this endpoint:
+
+```json
+{
+  "message": "You cannot delete your own user"
+}
+```
+
+### Logout
+
+```http
+GET /logout
+```
+
+This route requires authentication.
+
+Example:
+
+```bash
+curl http://127.0.0.1:5000/logout \
+  -b cookies.txt
+```
+
+Response:
+
+```json
+{
+  "message": "Logout successful"
+}
+```
+
+## HTTP Status Codes
+
+| Status Code | Meaning                               |
+| ----------- | ------------------------------------- |
+| `200`       | Request completed successfully        |
+| `400`       | Invalid data or incorrect credentials |
+| `401`       | Authentication required               |
+| `403`       | Operation not allowed                 |
+| `404`       | User not found                        |
+
+
+## License
+
+This project may be used for educational purposes and for learning Flask, authentication, and REST API development.
